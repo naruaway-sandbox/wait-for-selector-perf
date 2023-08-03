@@ -1,6 +1,7 @@
 # Puppeteer has much faster waitForSelector than Playwright
 
-**Note that this repro just compares waitForSelector performance. This alone does NOT mean "Puppeteer is faster in general"**
+- **Note that this repro just compares waitForSelector performance. This alone does NOT mean "Puppeteer is faster in general"**
+- GitHub issue in Playwright: https://github.com/microsoft/playwright/issues/24578
 
 Since Puppeteer is internally [using `polling: 'mutation'` option in `waitForFunction`](https://github.com/puppeteer/puppeteer/blob/9a814a365644a1e404eb36266a08f579bb2c26ac/packages/puppeteer-core/src/common/IsolatedWorld.ts#L443-L443) for `waitForSelector`, it will use MutationObserver to efficiently react to newly appeared DOM node.
 
