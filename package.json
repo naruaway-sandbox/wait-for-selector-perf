@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "wait-for-selector-perf",
+  "version": "0.1.0",
+  "scripts": {
+    "puppeteer": "TARGET=puppeteer node main.js",
+    "playwright": "TARGET=playwright node main.js"
+  },
+  "dependencies": {
+    "playwright": "1.36.2",
+    "puppeteer": "21.0.0"
+  }
+}
