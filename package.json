@@ -1,7 +1,7 @@
 {
+  "name": "wait-for-selector-perf",
   "private": true,
   "type": "module",
-  "name": "wait-for-selector-perf",
   "version": "0.1.0",
   "scripts": {
     "puppeteer": "TARGET=puppeteer node main.js",
