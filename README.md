@@ -23,8 +23,8 @@ npm run playwright
 I ran the above on my MacBook Air (M2) and the result was the following:
 
 ```
-puppeteer: It took 15ms to react to the appearance of <a> element
-playwright: It took 328ms to react to the appearance of <a> element
+puppeteer: It took 10ms to react to the appearance of <a> element
+playwright: It took 321ms to react to the appearance of <a> element
 ```
 
-So Puppeteer has around **20x faster** `waitForSelector` compared with the one from Playwright.
+So Puppeteer has more than **20x faster** `waitForSelector` compared with the one from Playwright.
