@@ -1,22 +1,14 @@
 import * as puppeteer from "puppeteer";
 import { chromium } from "playwright";
 
-const targetPageUrl =
-  "data:text/html," +
+const targetPageUrl = "data:text/html," +
   encodeURIComponent(`
 <!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
   </head>
-  <body>
-    <script>
-      setTimeout(() => {
-        document.body.innerHTML = '<a href="#">LINK</a>';
-        window._appearanceTimeStamp = Date.now();
-      }, 3000);
-    </script>
-  </body>
+  <body></body>
 </html>
 `);
 
@@ -47,14 +39,36 @@ const instance = await {
   },
 }[target]();
 
-await instance.waitForA();
-const waitFinishTimeStamp = Date.now();
-const appearanceTimeStamp = await instance.evaluate(
-  () => window._appearanceTimeStamp,
-);
-console.log(
-  `${target}: It took ${
-    waitFinishTimeStamp - appearanceTimeStamp
-  }ms to react to the appearance of <a> element`,
-);
-await instance.close();
+/*
+ * This measures the duration between 3. and 4. in the following sequence.
+ * Shorter duration means faster reaction of waitForSelector.
+ *
+ * 1. Start waitForA (waitForSelector)
+ * 2. Sleep for enough duration
+ * 3. Insert <a> tag
+ * 4. waitForA resolves
+ */
+const runBenchmark = async (sleepDurationMs) => {
+  let appearanceTimeStamp;
+
+  instance.waitForA().then(async () => {
+    const waitFinishTimeStamp = performance.now();
+
+    console.log(
+      `${target}: It took ${
+        waitFinishTimeStamp - appearanceTimeStamp
+      }ms to react to the appearance of <a> element`,
+    );
+    await instance.close();
+  });
+
+  setTimeout(() => {
+    // Insert <a> tag in the DOM. Note that we know this evaluate() call itself is fast enough to be ignored (around 3ms for both Puppeteer and Playwright)
+    instance.evaluate(() => document.body.innerHTML = '<a href="#">LINK</a>')
+      .then(() => {
+        appearanceTimeStamp = performance.now();
+      });
+  }, sleepDurationMs);
+};
+
+runBenchmark(3000);
